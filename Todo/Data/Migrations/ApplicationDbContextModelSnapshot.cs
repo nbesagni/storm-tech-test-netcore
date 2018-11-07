@@ -186,6 +186,8 @@ namespace Todo.Data.Migrations
 
                     b.Property<bool>("IsDone");
 
+                    b.Property<int>("Rank");
+
                     b.Property<string>("ResponsiblePartyId");
 
                     b.Property<string>("Title");
