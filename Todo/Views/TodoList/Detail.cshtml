@@ -17,6 +17,10 @@
             <a asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId">
                 <strong>Add New Item</strong>
             </a>
+             | 
+            <a id="toggleDoneItems">
+                <strong><span id="toggleDoneItemsText">Hide Completed Items</span></strong>
+            </a>
         </li>
         @*Set order of Importance (Task 2)*@
         @{var orderType = new Dictionary
@@ -42,8 +46,17 @@
                         contextualClass = "";
                         break;
                 }
+                string contextualClassIsDone;
+                if (item.IsDone)
+                {
+                    contextualClassIsDone = "doneItem";
+                }
+                else
+                {
+                    contextualClassIsDone = "";
+                }
 
-                <li class="list-group-item @contextualClass">
+                <li class="list-group-item @contextualClass @contextualClassIsDone">
 
                     <div class="row">
 
