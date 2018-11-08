@@ -7,5 +7,21 @@ $("#toggleDoneItems").click(function () {
     });
     var text = $('#toggleDoneItemsText').text();
     $('#toggleDoneItemsText').text(
-        text == "Hide Completed Items" ? "Show Completed Items" : "Hide Completed Items");
+        text === "Hide Completed Items" ? "Show Completed Items" : "Hide Completed Items");
+});
+
+
+$("#toggleRanking").click(function () {
+    if ($('#toggleRankingText').text() === "Order By Importance") {
+        location.reload();
+    }
+    else {
+        $(".itemOrder li").sort(sort_li).appendTo('.itemOrder');
+        var text = $('#toggleRankingText').text();
+        $('#toggleRankingText').text(
+            text === "Order By Rank" ? "Order By Importance" : "Order By Rank");
+    }
+    function sort_li(a, b) {
+        return ($(a).data('position')) < ($(b).data('position')) ? 1 : -1;
+    }
 });

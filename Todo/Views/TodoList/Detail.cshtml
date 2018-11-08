@@ -11,15 +11,19 @@
 
 <div class="col-md-6">
 
-    <ul class="list-group">
+    <ul class="list-group itemOrder">
 
-        <li class="list-group-item">
+        <li class="list-group-item" data-position="1000">
             <a asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId">
                 <strong>Add New Item</strong>
             </a>
-             | 
+            |
             <a id="toggleDoneItems">
                 <strong><span id="toggleDoneItemsText">Hide Completed Items</span></strong>
+            </a>
+            |
+            <a id="toggleRanking">
+                <strong><span id="toggleRankingText">Order By Rank</span></strong>
             </a>
         </li>
         @*Set order of Importance (Task 2)*@
@@ -56,7 +60,7 @@
                     contextualClassIsDone = "";
                 }
 
-                <li class="list-group-item @contextualClass @contextualClassIsDone">
+                <li class="list-group-item @contextualClass @contextualClassIsDone" data-position="@item.Rank">
 
                     <div class="row">
 
