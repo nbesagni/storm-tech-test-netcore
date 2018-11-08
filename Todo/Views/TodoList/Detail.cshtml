@@ -80,9 +80,21 @@
 
                         <div class="col-md-4 text-right">
                             <small>
-                                @item.ResponsibleParty.UserName
+                                <span id="responsiblePartyUsername@(item.TodoItemId)"></span>
 
-                                <img src="https://www.gravatar.com/avatar/@Gravatar.GetHash(item.ResponsibleParty.Email)?s=30" />
+                                @item.ResponsibleParty.UserName
+                                @{
+                                    var gravatarhash = Gravatar.GetHash(item.ResponsibleParty.Email);
+                                }
+                                <script type="text/javascript">
+                                    function changeName(profile) {
+                                        document.getElementById("responsiblePartyUsername@(item.TodoItemId)").innerHTML = profile.entry[0].displayName + " | ";
+                                    }
+
+                                </script>
+                                <script src="https://www.gravatar.com/@(gravatarhash).json?callback=changeName"></script>
+
+                                <img src="https://www.gravatar.com/avatar/@(gravatarhash)?s=30" />
 
                             </small>
                         </div>

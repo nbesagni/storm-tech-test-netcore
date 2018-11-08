@@ -23,18 +23,30 @@
 
                     <img src="https://www.gravatar.com/avatar/@gravatarhash?s=30" />
                     @UserManager.GetUserName(User)
+                    <span id="navbarUsername"></span>
+
+                    @*Fetch user's display name from Gravatar*@
+                    <script type="text/javascript">
+                        function changeName(profile) {
+                            document.getElementById("navbarUsername").innerHTML = " | " + profile.entry[0].displayName;
+                        }
+
+                    </script>
+                    <script src="https://www.gravatar.com/@(gravatarhash).json?callback=changeName"></script>
                 </a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-            </li>
-        </ul>
-    </form>
+                                    </li >
+                                <li>
+                                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                                </li>
+                                </ul >
+/**/
+                            </form >
 }
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
-    </ul>
+                                /**/
+                                <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                                <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                            </ul>
 }
