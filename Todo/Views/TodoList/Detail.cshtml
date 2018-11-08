@@ -1,6 +1,7 @@
 ﻿@using Todo.Controllers
 @using Todo.Data.Entities
 @using Todo.Services
+@using Todo.Models.TodoItems
 @model Todo.Models.TodoLists.TodoListDetailViewmodel
 
 @{
@@ -14,8 +15,8 @@
     <ul class="list-group itemOrder">
 
         <li class="list-group-item" data-position="1000">
-            <a asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId">
-                <strong>Add New Item</strong>
+            <a @*asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId"*@>
+                <strong><span id="addNewItemBtn">Add New Item</span></strong>
             </a>
             |
             <a id="toggleDoneItems">
@@ -25,6 +26,11 @@
             <a id="toggleRanking">
                 <strong><span id="toggleRankingText">Order By Rank</span></strong>
             </a>
+        </li>
+        <li class="list-group-item" data-position="999" id="addNewItemPanel">
+
+            @{await Html.RenderPartialAsync("_CreateToDoItem", new TodoItemCreateFields { TodoListId = Model.TodoListId });}
+
         </li>
         @*Set order of Importance (Task 2)*@
         @{var orderType = new Dictionary
