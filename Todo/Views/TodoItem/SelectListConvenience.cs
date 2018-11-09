@@ -19,5 +19,12 @@ namespace Todo.Views.TodoItem
         {
             return dbContext.Users.Select(u => new SelectListItem {Text = u.UserName, Value = u.Id}).ToList();
         }
+
+        public static List<SelectListItem> RankSelectListItems(this ApplicationDbContext dbContext, int todoList, int todoItemId)
+        {
+            return dbContext.TodoItems.Where(i => i.TodoListId == todoList)
+                .OrderByDescending(i => i.Rank)
+                .Select(i => new SelectListItem { Selected = (i.TodoItemId == todoItemId), Text = i.Title, Value = (1 + i.Rank).ToString() }).ToList();
+        }
     }
 }
