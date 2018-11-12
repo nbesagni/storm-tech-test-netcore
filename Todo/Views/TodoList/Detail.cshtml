@@ -12,9 +12,13 @@
 
 <div class="col-md-6">
 
-    <ul class="list-group itemOrder">
+    <script>
 
-        <li class="list-group-item" data-position="1000">
+    </script>
+
+    <ul class="list-group itemOrder" id="sortable">
+
+        <li class="list-group-item ui-state-disabled" data-position="-1000">
             <a @*asp-action="Create" asp-controller="TodoItem" asp-route-todoListId="@Model.TodoListId"*@>
                 <strong><span id="addNewItemBtn">Add New Item</span></strong>
             </a>
@@ -27,86 +31,86 @@
                 <strong><span id="toggleRankingText">Order By Rank</span></strong>
             </a>
         </li>
-        <li class="list-group-item" data-position="999" id="addNewItemPanel">
+        <li class="list-group-item ui-state-disabled" data-position="-999" id="addNewItemPanel">
 
             @{await Html.RenderPartialAsync("_CreateToDoItem", new TodoItemCreateFields { TodoListId = Model.TodoListId });}
 
         </li>
         @*Set order of Importance (Task 2)*@
         @{var orderType = new Dictionary
-              <string, int>
-                  () {
+                <string, int>
+                    () {
             { "High", 0 },
             { "Medium", 1 },
             { "Low", 2 },
           };
         }
-            @foreach (var item in Model.Items.OrderBy(m => orderType[m.Importance.ToString()]))
+        @foreach (var item in Model.Items.OrderBy(m => orderType[m.Importance.ToString()]))
+        {
+            string contextualClass;
+            switch (item.Importance)
             {
-                string contextualClass;
-                switch (item.Importance)
-                {
-                    case Importance.High:
-                        contextualClass = "list-group-item-danger";
-                        break;
-                    case Importance.Low:
-                        contextualClass = "list-group-item-info";
-                        break;
-                    default:
-                        contextualClass = "";
-                        break;
-                }
-                string contextualClassIsDone;
-                if (item.IsDone)
-                {
-                    contextualClassIsDone = "doneItem";
-                }
-                else
-                {
-                    contextualClassIsDone = "";
-                }
+                case Importance.High:
+                    contextualClass = "list-group-item-danger";
+                    break;
+                case Importance.Low:
+                    contextualClass = "list-group-item-info";
+                    break;
+                default:
+                    contextualClass = "";
+                    break;
+            }
+            string contextualClassIsDone;
+            if (item.IsDone)
+            {
+                contextualClassIsDone = "doneItem";
+            }
+            else
+            {
+                contextualClassIsDone = "";
+            }
 
-                <li class="list-group-item @contextualClass @contextualClassIsDone" data-position="@item.Rank">
+            <li class="list-group-item ui-state-default @contextualClass @contextualClassIsDone" data-position="@item.Rank" id="item_@item.TodoItemId">
 
-                    <div class="row">
+                <div class="row">
 
-                        <div class="col-md-8">
-                            <a asp-action="Edit" asp-controller="TodoItem" asp-route-todoItemId="@item.TodoItemId">
+                    <div class="col-md-8">
+                        <a asp-action="Edit" asp-controller="TodoItem" asp-route-todoItemId="@item.TodoItemId">
 
-                                @if (item.IsDone)
-                                {
-                                    <s>@item.Title</s>
-                                }
-                                else
-                                {
-                                    <text>@item.Title</text>
-                                }
-                            </a>
-                        </div>
+                            @if (item.IsDone)
+                            {
+                                <s>@item.Title</s>
+                            }
+                            else
+                            {
+                                <text>@item.Title</text>
+                            }
+                        </a>
+                    </div>
 
-                        <div class="col-md-4 text-right">
-                            <small>
-                                <span id="responsiblePartyUsername@(item.TodoItemId)"></span>
+                    <div class="col-md-4 text-right">
+                        <small>
+                            <span id="responsiblePartyUsername@(item.TodoItemId)"></span>
 
-                                @item.ResponsibleParty.UserName
-                                @{
-                                    var gravatarhash = Gravatar.GetHash(item.ResponsibleParty.Email);
-                                }
-                                <script type="text/javascript">
+                            @item.ResponsibleParty.UserName
+                            @{
+                                var gravatarhash = Gravatar.GetHash(item.ResponsibleParty.Email);
+                            }
+                            <script type="text/javascript">
                                     function changeName(profile) {
                                         document.getElementById("responsiblePartyUsername@(item.TodoItemId)").innerHTML = profile.entry[0].displayName + " | ";
                                     }
 
-                                </script>
-                                <script src="https://www.gravatar.com/@(gravatarhash).json?callback=changeName"></script>
+                            </script>
+                            <script src="https://www.gravatar.com/@(gravatarhash).json?callback=changeName"></script>
 
-                                <img src="https://www.gravatar.com/avatar/@(gravatarhash)?s=30" />
+                            <img src="https://www.gravatar.com/avatar/@(gravatarhash)?s=30" />
 
-                            </small>
-                        </div>
+                        </small>
                     </div>
+                </div>
 
-                </li>
-            }
+            </li>
+        }
     </ul>
 </div>

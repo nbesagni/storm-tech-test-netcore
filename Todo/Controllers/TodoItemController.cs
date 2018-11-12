@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Data;
@@ -32,8 +33,9 @@ namespace Todo.Controllers
         public async Task<IActionResult> Create(TodoItemCreateFields fields)
         {
             if (!ModelState.IsValid) { return View(fields); }
-
-            var item = new TodoItem(fields.TodoListId, fields.ResponsiblePartyId, fields.Title, fields.Importance);
+            int newRank = dbContext.TodoItems.Where(i => i.TodoListId == fields.TodoListId).Count() + 1;
+            fields.Rank = newRank;
+            var item = new TodoItem(fields.TodoListId, fields.ResponsiblePartyId, fields.Title, fields.Importance, fields.Rank);
 
             await dbContext.AddAsync(item);
             await dbContext.SaveChangesAsync();
@@ -54,11 +56,12 @@ namespace Todo.Controllers
         public async Task<IActionResult> Edit(TodoItemEditFields fields)
         {
             if (!ModelState.IsValid) { return View(fields); }
-
+            fields.Rank--;
             var todoItem = dbContext.SingleTodoItem(fields.TodoItemId);
 
+            TodoItemsRankAPIController.MoveToDoItemRankings(todoItem, fields.Rank, dbContext);
             TodoItemEditFieldsFactory.Update(fields, todoItem);
-
+            
             dbContext.Update(todoItem);
             await dbContext.SaveChangesAsync();
 

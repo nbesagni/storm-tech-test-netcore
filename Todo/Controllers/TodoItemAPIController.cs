@@ -22,20 +22,18 @@ namespace Todo.Controllers
     public class TodoItemAPIController : ControllerBase
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IUserStore<IdentityUser> userStore;
 
-        public TodoItemAPIController(ApplicationDbContext dbContext, IUserStore<IdentityUser> userStore)
+        public TodoItemAPIController(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-            this.userStore = userStore;
         }
 
         // GET: api/TodoItemAPI
-        //[HttpGet]
-        //public IEnumerable<TodoItem> GetTodoItems()
-        //{
-        //    return dbContext.TodoItems;
-        //}
+        [HttpGet]
+        public IEnumerable<TodoItem> GetTodoItems(int todoListId)
+        {
+            return dbContext.TodoItems.Where(i => i.TodoListId == todoListId);
+        }
 
         //// GET: api/TodoItemAPI/5
         //[HttpGet("{todoListId}")]
@@ -53,12 +51,14 @@ namespace Todo.Controllers
         [HttpPost]
         public async Task<IActionResult> PostTodoItem([FromBody] Models.TodoItems.TodoItemCreateFields todoItem)
         {
-            var item = new TodoItem(todoItem.TodoListId, todoItem.ResponsiblePartyId, todoItem.Title, todoItem.Importance);
+            int newRank = dbContext.TodoItems.Where(i => i.TodoListId == todoItem.TodoListId).Count() + 1;
+            todoItem.Rank = newRank;
+            var item = new TodoItem(todoItem.TodoListId, todoItem.ResponsiblePartyId, todoItem.Title, todoItem.Importance, todoItem.Rank);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            
             dbContext.TodoItems.Add(item);
             await dbContext.SaveChangesAsync();
 

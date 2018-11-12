@@ -71,6 +71,7 @@
 
 <environment include="Development">
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </environment>
 <environment exclude="Development">
@@ -80,6 +81,10 @@
             crossorigin="anonymous"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
     </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            asp-fallback-src="~/lib/jqueryui/jquery.min.js"
+            crossorigin="anonymous">
+    </script>        
     <script src="~/js/site.min.js" asp-append-version="true"></script>
 </environment>
 
